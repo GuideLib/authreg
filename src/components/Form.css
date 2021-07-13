@@ -1,0 +1,11 @@
+h1 {
+    font-family: Roboto;
+    font-weight: 500;
+}
+
+.Form{
+    background-color: #ffffff;
+    width: 370px;
+    margin: 0 auto;
+    padding: 20px;
+}
