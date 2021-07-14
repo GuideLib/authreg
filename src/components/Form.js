@@ -5,13 +5,10 @@ import clsx from 'clsx';
 import {makeStyles, withStyles} from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
-import FilledInput from '@material-ui/core/FilledInput';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import {Button} from "@material-ui/core";
@@ -69,7 +66,23 @@ export default function Form(){
         showPassword: false
     })
 
+    const [valid, setValid] = React.useState({
+        phoneIsValid: true,
+        passwordIsValid: true
+    })
+
+    const validatePhone = (input) => {
+        const ref = new RegExp('^(\\s*)?(\\+)?([- _():=+]?\\d[- _():=+]?){10,14}(\\s*)?$')
+        if(ref.exec(input)) {
+            setValid({...valid, phoneIsValid:true})
+        }
+        else setValid({...valid, phoneIsValid:false})
+    }
+
     const handleChange = (prop) => (event) => {
+        if(prop==='phone'){
+            validatePhone(event.target.value)
+        }
         setValues({...values,[prop]:event.target.value})
     }
 
@@ -88,11 +101,12 @@ export default function Form(){
                 <FormControl className={clsx(classes.margin, classes.textField)}>
                     <InputLabel htmlFor='phone-email'>Phone/Email</InputLabel>
                     <Input
+                        error={!valid.phoneIsValid}
                         id='phone-email'
                         value={values.phone}
                         onChange={handleChange('phone')}
                     />
-                    <FormHelperText>Disabled</FormHelperText>
+                    <FormHelperText error={!valid.phoneIsValid}>{valid.phoneIsValid ? '':'Incorrect phone'}</FormHelperText>
                 </FormControl>
             </div>
             <div>
